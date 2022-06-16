@@ -4,25 +4,29 @@ import { Link, useParams } from 'react-router-dom';
 import ScreenHeader from '../../components/ScreenHeader';
 import { useGetQuery } from '../../store/services/categoryService';
 import { clearMessage } from '../../store/reducers/globalReducer';
-
 import Wrapper from './Wrapper';
 import Spinner from '../../components/Spinner';
-
+import Pagination from '../../components/Pagination';
 const Categories = () => {
-  const { page } = useParams();
+  let { page } = useParams();
+  if(!page){
+    page=1;
+  }
   console.log('Your page number', page);
   const { success } = useSelector((state) => state.globalReducer);
-  console.log(success);
+  /* console.log(success); */
   const dispatch = useDispatch();
-  const { data = [], isLoading } = useGetQuery(page ? page : 1);
-  console.log(data, isLoading);
+  const { data = [],  isFetching } = useGetQuery(page);
+ /*  console.log(data, isLoading); */
   useEffect(() => {
     return () => {
       dispatch(clearMessage());
     };
   }, []);
+
   return (
     <Wrapper>
+      
       <ScreenHeader>
         <Link to='/dashboard/create-category' className='btn-dark'>
           {' '}
@@ -30,7 +34,9 @@ const Categories = () => {
         </Link>
       </ScreenHeader>
       {success && <div className='alert-success'>{success}</div>}
-      {!isLoading ? data?.categories?.length>0 && <div>
+      {!isFetching ? data?.categories?.length>0 && 
+      <>
+      <div>
         <table className="w-full bg-gray-900 rounded-md">
                  <thead>
                     <tr className="border-b border-gray-800 text-left">
@@ -50,7 +56,7 @@ const Categories = () => {
                  </tbody>
               </table>
 
-      </div> : <Spinner />}
+      </div><Pagination page={parseInt(page)} perPage={data.perPage} count={data.count} path="dashboard/categories"/></> : <Spinner />}
     </Wrapper>
   );
 };
