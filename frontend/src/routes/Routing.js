@@ -4,6 +4,7 @@ import AdminLogin from '../screens/auth/AdminLogin';
 import Categories from '../screens/dashboard/Categories';
 import CreateCategory from '../screens/dashboard/CreateCategory';
 import Products from '../screens/dashboard/Products';
+import UpdateCategory from '../screens/dashboard/UpdateCategory';
 import Private from './Private';
 import Public from './Public';
 const Routing = () => {
@@ -50,6 +51,14 @@ const Routing = () => {
             element={
               <Private>
                 <CreateCategory />
+              </Private>
+            }
+          />
+          <Route
+            path='update-category/:id'
+            element={
+              <Private>
+                <UpdateCategory />
               </Private>
             }
           />
