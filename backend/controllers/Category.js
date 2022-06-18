@@ -79,6 +79,15 @@ class Category {
       return res.status(500).json('Server internal error!');
     }
   }
+  async allCategories(req, res) {
+    try {
+      const categories = await CategoryModel.find({});
+      return res.status(200).json({ categories });
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).json('Server internal error!');
+    }
+  }
 }
 
 module.exports = new Category();

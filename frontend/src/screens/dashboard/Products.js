@@ -1,15 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Wrapper from './Wrapper';
-
 
 const Products = () => {
   return (
     <Wrapper>
-       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam
-        fugit tempore consequatur deleniti, quod nesciunt nisi enim
-        accusantium, minus odio excepturi in nostrum impedit accusamus.
-        Eligendi quam exercitationem aspernatur magni?
-  </Wrapper>
+      <Link to='/dashboard/create-product' className='btn-dark'>
+        create product
+      </Link>
+    </Wrapper>
   );
 };
 
