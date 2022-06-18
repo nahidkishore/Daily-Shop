@@ -1,6 +1,6 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
-@import './tailwindcss/button.css';
+@import './stylecss/button.css';
 @import 'tailwindcss/utilities';
 
 @layer components {

@@ -2,15 +2,15 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const categoryService = createApi({
   reducerPath: 'category',
-  tagTypes:'categories',
+  tagTypes: 'categories',
   baseQuery: fetchBaseQuery({
-      baseUrl: 'http://localhost:5000/api/',
-      prepareHeaders: (headers, {getState}) => {
-        const reducers = getState();
-        const token = reducers?.authReducer?.adminToken;
-        headers.set('authorization', token ? `Bearer ${token}` : '');
-        return headers;
-    }
+    baseUrl: 'http://localhost:5000/api/',
+    prepareHeaders: (headers, { getState }) => {
+      const reducers = getState();
+      const token = reducers?.authReducer?.adminToken;
+      headers.set('authorization', token ? `Bearer ${token}` : '');
+      return headers;
+    },
   }),
   endpoints: (builder) => {
     return {
@@ -22,18 +22,29 @@ const categoryService = createApi({
             body: name,
           };
         },
-        invalidatesTags:['categories']
+        invalidatesTags: ['categories'],
       }),
       updateCategory: builder.mutation({
         query: (data) => {
           return {
             url: `update-category/${data.id}`,
             method: 'PUT',
-            body: {name: data.name},
-          }
+            body: { name: data.name },
+          };
         },
-        providesTags:['categories']
+        providesTags: ['categories'],
       }),
+      
+      deleteCategory: builder.mutation({
+        query: (id) => {
+          return {
+            url: `delete-category/${id}`,
+            method: 'DELETE'
+          };
+        },
+        providesTags: ['categories'],
+      }),
+
       get: builder.query({
         query: (page) => {
           return {
@@ -41,19 +52,25 @@ const categoryService = createApi({
             method: 'GET',
           };
         },
-        providesTags:['categories']
+        providesTags: ['categories'],
       }),
-      fetchCategory:builder.query({
+      fetchCategory: builder.query({
         query: (id) => {
           return {
-              url: `fetch-category/${id}`,
-              method: 'GET'
-          }
+            url: `fetch-category/${id}`,
+            method: 'GET',
+          };
         },
-        providesTags: ['categories']
-      })
+        providesTags: ['categories'],
+      }),
     };
   },
 });
-export const { useCreateMutation, useGetQuery,useFetchCategoryQuery,useUpdateCategoryMutation } = categoryService;
+export const {
+  useCreateMutation,
+  useGetQuery,
+  useFetchCategoryQuery,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+} = categoryService;
 export default categoryService;
