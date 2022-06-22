@@ -8,10 +8,14 @@ import { TwitterPicker } from 'react-color';
 import { v4 as uuidv4 } from 'uuid';
 import Colors from '../../components/Colors';
 import SizesList from '../../components/SizesList';
+import ImagePreview from '../../components/ImagePreview';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const CreateProduct = () => {
   const { data = [], isFetching } = useAllCategoriesQuery();
-  console.log(data, isFetching);
+  //console.log(data, isFetching);
+  const [value, setValue] = useState('');
   const [state, setState] = useState({
     title: '',
     price: 0,
@@ -19,6 +23,9 @@ const CreateProduct = () => {
     stock: 0,
     category: '',
     colors: [],
+    image1: '',
+    image2: '',
+    image3: '',
   });
 
   const [sizes] = useState([
@@ -35,6 +42,22 @@ const CreateProduct = () => {
     { name: '5 years' },
   ]);
   const [sizeList, setSizeList] = useState([]);
+  const [preview, setPreview] = useState({
+    image1: '',
+    image2: '',
+    image3: '',
+  });
+  const handleImage = (e) => {
+    /*   console.log(e.target.files) */
+    if (e.target.files.length !== 0) {
+      setState({ ...state, [e.target.name]: e.target.files[0] });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview({ ...preview, [e.target.name]: reader.result });
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
   const handleInput = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -61,7 +84,7 @@ const CreateProduct = () => {
     const filtered = sizeList.filter((size) => size.name !== name);
     setSizeList(filtered);
   };
-
+  console.log(preview);
   return (
     <Wrapper>
       <ScreenHeader>
@@ -186,6 +209,7 @@ const CreateProduct = () => {
                 name='image1'
                 id='image1'
                 className='input-file'
+                onChange={handleImage}
               />
             </div>
 
@@ -198,6 +222,7 @@ const CreateProduct = () => {
                 name='image2'
                 id='image2'
                 className='input-file'
+                onChange={handleImage}
               />
             </div>
 
@@ -210,6 +235,26 @@ const CreateProduct = () => {
                 name='image3'
                 id='image3'
                 className='input-file'
+                onChange={handleImage}
+              />
+            </div>
+            <div className='w-full p-3'>
+              <label htmlFor='description' className='label'>
+                Description
+              </label>
+              <ReactQuill
+                theme='snow'
+                id='description'
+                value={value}
+                onChange={setValue}
+                placeholder='Description...'
+              />
+            </div>
+            <div className='w-full p-3'>
+              <input
+                type='submit'
+                value='save product'
+                className='btn btn-indigo'
               />
             </div>
           </div>
@@ -217,6 +262,9 @@ const CreateProduct = () => {
         <div className='w-full xl:w-4/12 p-3'>
           <Colors colors={state.colors} deleteColor={deleteColor} />
           <SizesList list={sizeList} deleteSize={deleteSize} />
+          <ImagePreview url={preview.image1} heading='image 1' />
+          <ImagePreview url={preview.image2} heading='image 2' />
+          <ImagePreview url={preview.image3} heading='image 3' />
         </div>
       </div>
     </Wrapper>
