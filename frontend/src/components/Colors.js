@@ -2,7 +2,7 @@ const Colors = ({ colors, deleteColor }) => {
   return (
     <div>
       {colors.length > 0 && (
-        <h1 className='capitalize mb-2 text-gray-400 text-base'>colors list</h1>
+        <h1 className='right-heading'>colors list</h1>
       )}
       {colors.length > 0 && (
         <div className='flex flex-wrap -mx-1'>
