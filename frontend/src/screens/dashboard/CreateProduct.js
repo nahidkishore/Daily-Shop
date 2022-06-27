@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Wrapper from './Wrapper';
 import ScreenHeader from '../../components/ScreenHeader';
 import { useAllCategoriesQuery } from '../../store/services/categoryService';
@@ -10,8 +11,10 @@ import Colors from '../../components/Colors';
 import SizesList from '../../components/SizesList';
 import ImagePreview from '../../components/ImagePreview';
 import ReactQuill from 'react-quill';
+import toast, { Toaster } from 'react-hot-toast';
 import 'react-quill/dist/quill.snow.css';
 import { useCreateProductMutation } from '../../store/services/productService';
+import { setSuccess } from '../../store/reducers/globalReducer';
 
 const CreateProduct = () => {
   const { data = [], isFetching } = useAllCategoriesQuery();
@@ -102,9 +105,26 @@ const CreateProduct = () => {
     /*  console.log(state);
     console.log(sizeList); */
   };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!response.isSuccess) {
+      response?.error?.data?.errors.map((err) => {
+        toast.error(err.msg);
+      });
+    }
+  }, [response?.error?.data?.errors]);
+
+  useEffect(() => {
+    if (response?.isSuccess) {
+      dispatch(setSuccess(response?.data?.msg));
+      navigate('/dashboard/products');
+    }
+  }, [response?.isSuccess]);
   return (
     <Wrapper>
       <ScreenHeader>
+        <Toaster position='top-right' reverseOrder={true} />
         <Link to='/dashboard/products' className='btn-dark'>
           <i className='bi bi-arrow-left-short'></i> products list
         </Link>
@@ -270,7 +290,8 @@ const CreateProduct = () => {
             <div className='w-full p-3'>
               <input
                 type='submit'
-                value='save product'
+                value={response.isLoading ? 'loading...' : 'save product'}
+                disabled={response.isLoading ? true : false}
                 className='btn btn-indigo'
               />
             </div>

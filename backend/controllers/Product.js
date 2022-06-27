@@ -15,7 +15,7 @@ class Product {
         const parseData = JSON.parse(fields.data);
         const errors = [];
         if (parseData.title.trim().length === 0) {
-          errors.push({ msg: 'Title is required' });
+          errors.push({ msg: 'Title must berequired' });
         }
         if (parseInt(parseData.price) < 1) {
           errors.push({ msg: 'Price should be above $1' });
@@ -28,18 +28,18 @@ class Product {
           errors.push({ msg: 'Stock should be above 20' });
         }
         if (fields.description.trim().length === 0) {
-          errors.push({ msg: 'Description is required' });
+          errors.push({ msg: 'Description must be required' });
         }
 
         if (errors.length === 0) {
           if (!files['image1']) {
-            errors.push({ image1: 'Image1 is required' });
+            errors.push({ msg: 'Image1 is required' });
           }
           if (!files['image2']) {
-            errors.push({ image2: 'Image2 is required' });
+            errors.push({ msg: 'Image2 is required' });
           }
           if (!files['image3']) {
-            errors.push({ image3: 'Image3 is required' });
+            errors.push({ msg: 'Image3 is required' });
           }
           if (errors.length === 0) {
             const images = {};
@@ -63,9 +63,7 @@ class Product {
                 });
               } else {
                 const error = {};
-                error[
-                  `image${i + 1}`
-                ] = `image{i+1} has invalid ${extension} type`;
+                error['msg'] = `image{i+1} has invalid ${extension} type`;
                 errors.push(error);
               }
               console.log(mimetype);
@@ -86,9 +84,11 @@ class Product {
                   image3: images['image3'],
                   description: fields.description,
                 });
-                return res.status(201).json({msg: 'Product has created successfully', response})
+                return res
+                  .status(201)
+                  .json({ msg: 'Product has created successfully', response });
               } catch (error) {
-                console.log(error)
+                console.log(error);
                 return res.status(500).json(error);
               }
             } else {
