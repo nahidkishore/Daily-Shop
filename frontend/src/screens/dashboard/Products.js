@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 import { clearMessage } from '../../store/reducers/globalReducer';
 import Wrapper from './Wrapper';
-import { useGetProductQuery } from '../../store/services/productService';
+import {  useGetProductsQuery } from '../../store/services/productService';
 import ScreenHeader from '../../components/ScreenHeader';
 import Spinner from '../../components/Spinner';
 import Pagination from '../../components/Pagination';
@@ -14,7 +14,7 @@ const Products = () => {
   if (!page) {
     page = 1;
   }
-  const { data = [], isFetching } = useGetProductQuery(page);
+  const { data = [], isFetching } = useGetProductsQuery(page);
   console.log(data);
   const { success } = useSelector((state) => state.globalReducer);
   const dispatch = useDispatch();
@@ -81,7 +81,7 @@ const Products = () => {
                       />
                     </td>
                     <td className='p-3 capitalize text-sm font-normal text-gray-400'>
-                      <Link to={``} className='btn btn-warning'>
+                      <Link to={`/dashboard/edit-product/${product._id}`} className='btn btn-warning'>
                         edit
                       </Link>
                     </td>

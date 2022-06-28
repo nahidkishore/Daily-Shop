@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Wrapper from './Wrapper';
 import ScreenHeader from '../../components/ScreenHeader';
@@ -9,14 +9,17 @@ import { TwitterPicker } from 'react-color';
 import { v4 as uuidv4 } from 'uuid';
 import Colors from '../../components/Colors';
 import SizesList from '../../components/SizesList';
-import ImagePreview from '../../components/ImagePreview';
+
 import ReactQuill from 'react-quill';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-quill/dist/quill.snow.css';
-import { useProductMutation } from '../../store/services/productService';
+import {  useGetProductQuery, useProductMutation } from '../../store/services/productService';
 import { setSuccess } from '../../store/reducers/globalReducer';
 
-const CreateProduct = () => {
+const EditProduct = () => {
+    const {id} = useParams();
+    const {data:product, isFetching: fetching} = useGetProductQuery(id);
+    console.log('data: ', product)
   const { data = [], isFetching } = useAllCategoriesQuery();
   //console.log(data, isFetching);
   const [value, setValue] = useState('');
@@ -27,9 +30,6 @@ const CreateProduct = () => {
     stock: 0,
     category: '',
     colors: [],
-    image1: '',
-    image2: '',
-    image3: '',
   });
 
   const [sizes] = useState([
@@ -46,22 +46,7 @@ const CreateProduct = () => {
     { name: '5 years' },
   ]);
   const [sizeList, setSizeList] = useState([]);
-  const [preview, setPreview] = useState({
-    image1: '',
-    image2: '',
-    image3: '',
-  });
-  const handleImage = (e) => {
-    /*   console.log(e.target.files) */
-    if (e.target.files.length !== 0) {
-      setState({ ...state, [e.target.name]: e.target.files[0] });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview({ ...preview, [e.target.name]: reader.result });
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
+
   const handleInput = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -89,7 +74,7 @@ const CreateProduct = () => {
     setSizeList(filtered);
   };
   //console.log(preview);
-  const [createNewProduct, response] = useProductMutation();
+  const [createNewProduct, response] =useProductMutation();
   console.log('your response', response);
   const handleCreateProduct = (e) => {
     e.preventDefault();
@@ -121,6 +106,15 @@ const CreateProduct = () => {
       navigate('/dashboard/products');
     }
   }, [response?.isSuccess]);
+
+  useEffect(() => {
+    if(!fetching) {
+       setState(product)
+       setSizeList(product.sizes)
+       setValue(product.description)
+    }
+   }, [product])
+   console.log('your state: ', state)
   return (
     <Wrapper>
       <ScreenHeader>
@@ -129,7 +123,7 @@ const CreateProduct = () => {
           <i className='bi bi-arrow-left-short'></i> products list
         </Link>
       </ScreenHeader>
-      <div className='flex flex-wrap mx-3'>
+      {!fetching ? <div className="flex flex-wrap -mx-3">
         <form className='w-full xl:w-8/12 p-3' onSubmit={handleCreateProduct}>
           <div className='flex flex-wrap'>
             <div className='w-full md:w-6/12 p-3'>
@@ -237,44 +231,7 @@ const CreateProduct = () => {
                 </div>
               )}
             </div>
-            <div className='w-full p-3'>
-              <label htmlFor='image1' className='label'>
-                Image 1
-              </label>
-              <input
-                type='file'
-                name='image1'
-                id='image1'
-                className='input-file'
-                onChange={handleImage}
-              />
-            </div>
 
-            <div className='w-full p-3'>
-              <label htmlFor='image2' className='label'>
-                Image 2
-              </label>
-              <input
-                type='file'
-                name='image2'
-                id='image2'
-                className='input-file'
-                onChange={handleImage}
-              />
-            </div>
-
-            <div className='w-full p-3'>
-              <label htmlFor='image3' className='label'>
-                Image 3
-              </label>
-              <input
-                type='file'
-                name='image3'
-                id='image3'
-                className='input-file'
-                onChange={handleImage}
-              />
-            </div>
             <div className='w-full p-3'>
               <label htmlFor='description' className='label'>
                 Description
@@ -300,13 +257,11 @@ const CreateProduct = () => {
         <div className='w-full xl:w-4/12 p-3'>
           <Colors colors={state.colors} deleteColor={deleteColor} />
           <SizesList list={sizeList} deleteSize={deleteSize} />
-          <ImagePreview url={preview.image1} heading='image 1' />
-          <ImagePreview url={preview.image2} heading='image 2' />
-          <ImagePreview url={preview.image3} heading='image 3' />
         </div>
-      </div>
+        </div> : <Spinner />}
+
     </Wrapper>
   );
 };
 
-export default CreateProduct;
+export default EditProduct;

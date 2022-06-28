@@ -24,7 +24,7 @@ const productService = createApi({
         },
         invalidatesTags: ['products'],
       }),
-      getProduct: builder.query({
+      getProducts: builder.query({
         query: (page) => {
           return {
             url:`/products/${page}`,
@@ -32,10 +32,19 @@ const productService = createApi({
           }
         },
         invalidatesTags:['products'],
-      })
+      }),
+      getProduct: builder.query({
+        query: (id) => {
+          return {
+            url:`/product/${id}`,
+            method: 'GET',
+          }
+        },
+        invalidatesTags:['products'],
+      }),
     };
   },
 });
-export const { useCreateProductMutation,useGetProductQuery } = productService;
+export const { useGetProductsQuery,useGetProductQuery,useProductMutation } = productService;
 
 export default productService;
