@@ -13,8 +13,8 @@ import ReactQuill from 'react-quill';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-quill/dist/quill.snow.css';
 import {
-  useCreateProductMutation,
   useGetProductQuery,
+  useUpdateProductMutation,
 } from '../../store/services/productService';
 import { setSuccess } from '../../store/reducers/globalReducer';
 
@@ -76,19 +76,13 @@ const CreateProduct = () => {
     setSizeList(filtered);
   };
   //console.log(preview);
-  const [createNewProduct, response] = useCreateProductMutation();
+  const [updateProduct, response] = useUpdateProductMutation();
   console.log('your response', response);
   const handleCreateProduct = (e) => {
     e.preventDefault();
-    // setState({ ...state, description: value, sizes: sizeList });
-    const formData = new FormData();
-    formData.append('data', JSON.stringify(state));
-    formData.append('sizes', JSON.stringify(sizeList));
-    formData.append('description', value);
 
-    createNewProduct(formData);
-    /*  console.log(state);
-    console.log(sizeList); */
+    updateProduct(state);
+    console.log('update product', state);
   };
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -119,150 +113,154 @@ const CreateProduct = () => {
   return (
     <Wrapper>
       <ScreenHeader>
-      
         <Link to='/dashboard/products' className='btn-dark'>
           <i className='bi bi-arrow-left-short'></i> products list
         </Link>
       </ScreenHeader>
       <Toaster position='top-right' reverseOrder={true} />
-      {!fetching ? <div className='flex flex-wrap mx-3'>
-        <form className='w-full xl:w-8/12 p-3' onSubmit={handleCreateProduct}>
-        <h3 className="pl-3 capitalize text-lg font-medium text-gray-400">edit product</h3>
-          <div className='flex flex-wrap'>
-            <div className='w-full md:w-6/12 p-3'>
-              <label htmlFor='title' className='label'>
-                Title
-              </label>
-              <input
-                type='text'
-                name='title'
-                className='form-control'
-                id='title'
-                placeholder='title...'
-                onChange={handleInput}
-                value={state.title}
-              />
-            </div>
-            <div className='w-full md:w-6/12 p-3'>
-              <label htmlFor='price' className='label'>
-                Price
-              </label>
-              <input
-                type='number'
-                name='price'
-                className='form-control'
-                id='price'
-                placeholder='price...'
-                onChange={handleInput}
-                value={state.price}
-              />
-            </div>
-            <div className='w-full md:w-6/12 p-3'>
-              <label htmlFor='discount' className='label'>
-                Discount
-              </label>
-              <input
-                type='number'
-                name='discount'
-                className='form-control'
-                id='discount'
-                placeholder='discount...'
-                onChange={handleInput}
-                value={state.discount}
-              />
-            </div>
-            <div className='w-full md:w-6/12 p-3'>
-              <label htmlFor='stock' className='label'>
-                Stock
-              </label>
-              <input
-                type='number'
-                name='stock'
-                className='form-control'
-                id='stock'
-                placeholder='stock...'
-                onChange={handleInput}
-                value={state.stock}
-              />
-            </div>
-            <div className='w-full md:w-6/12 p-3'>
-              <label htmlFor='categories' className='label'>
-                Categories
-              </label>
-              {!isFetching ? (
-                data?.categories?.length > 0 && (
-                  <select
-                    name='category'
-                    id='categories'
-                    className='form-control'
-                    onChange={handleInput}
-                    value={state.category}
-                  >
-                    <option value=''>Choose Category</option>
-                    {data?.categories?.map((category) => (
-                      <option value={category.name} key={category._id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                )
-              ) : (
-                <Spinner />
-              )}
-            </div>
-            <div className='w-full md:w-6/12 p-3'>
-              <label htmlFor='colors' className='label'>
-                Choose colors
-              </label>
-              <TwitterPicker onChangeComplete={saveColors} />
-            </div>
-            <div className='w-full p-3'>
-              <label htmlFor='sizes' className='label'>
-                Choose sizes
-              </label>
-              {sizes.length > 0 && (
-                <div className='flex flex-wrap -mx-3'>
-                  {sizes.map((size) => (
-                    <div
-                      key={size.name}
-                      className='size'
-                      onClick={() => chooseSize(size)}
+      {!fetching ? (
+        <div className='flex flex-wrap mx-3'>
+          <form className='w-full xl:w-8/12 p-3' onSubmit={handleCreateProduct}>
+            <h3 className='pl-3 capitalize text-lg font-medium text-gray-400'>
+              edit product
+            </h3>
+            <div className='flex flex-wrap'>
+              <div className='w-full md:w-6/12 p-3'>
+                <label htmlFor='title' className='label'>
+                  Title
+                </label>
+                <input
+                  type='text'
+                  name='title'
+                  className='form-control'
+                  id='title'
+                  placeholder='title...'
+                  onChange={handleInput}
+                  value={state.title}
+                />
+              </div>
+              <div className='w-full md:w-6/12 p-3'>
+                <label htmlFor='price' className='label'>
+                  Price
+                </label>
+                <input
+                  type='number'
+                  name='price'
+                  className='form-control'
+                  id='price'
+                  placeholder='price...'
+                  onChange={handleInput}
+                  value={state.price}
+                />
+              </div>
+              <div className='w-full md:w-6/12 p-3'>
+                <label htmlFor='discount' className='label'>
+                  Discount
+                </label>
+                <input
+                  type='number'
+                  name='discount'
+                  className='form-control'
+                  id='discount'
+                  placeholder='discount...'
+                  onChange={handleInput}
+                  value={state.discount}
+                />
+              </div>
+              <div className='w-full md:w-6/12 p-3'>
+                <label htmlFor='stock' className='label'>
+                  Stock
+                </label>
+                <input
+                  type='number'
+                  name='stock'
+                  className='form-control'
+                  id='stock'
+                  placeholder='stock...'
+                  onChange={handleInput}
+                  value={state.stock}
+                />
+              </div>
+              <div className='w-full md:w-6/12 p-3'>
+                <label htmlFor='categories' className='label'>
+                  Categories
+                </label>
+                {!isFetching ? (
+                  data?.categories?.length > 0 && (
+                    <select
+                      name='category'
+                      id='categories'
+                      className='form-control'
+                      onChange={handleInput}
+                      value={state.category}
                     >
-                      {size.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                      <option value=''>Choose Category</option>
+                      {data?.categories?.map((category) => (
+                        <option value={category.name} key={category._id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  )
+                ) : (
+                  <Spinner />
+                )}
+              </div>
+              <div className='w-full md:w-6/12 p-3'>
+                <label htmlFor='colors' className='label'>
+                  Choose colors
+                </label>
+                <TwitterPicker onChangeComplete={saveColors} />
+              </div>
+              <div className='w-full p-3'>
+                <label htmlFor='sizes' className='label'>
+                  Choose sizes
+                </label>
+                {sizes.length > 0 && (
+                  <div className='flex flex-wrap -mx-3'>
+                    {sizes.map((size) => (
+                      <div
+                        key={size.name}
+                        className='size'
+                        onClick={() => chooseSize(size)}
+                      >
+                        {size.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            <div className='w-full p-3'>
-              <label htmlFor='description' className='label'>
-                Description
-              </label>
-              <ReactQuill
-                theme='snow'
-                id='description'
-                value={value}
-                onChange={setValue}
-                placeholder='Description...'
-              />
+              <div className='w-full p-3'>
+                <label htmlFor='description' className='label'>
+                  Description
+                </label>
+                <ReactQuill
+                  theme='snow'
+                  id='description'
+                  value={value}
+                  onChange={setValue}
+                  placeholder='Description...'
+                />
+              </div>
+              <div className='w-full p-3'>
+                <input
+                  type='submit'
+                  value={response.isLoading ? 'loading...' : 'save product'}
+                  disabled={response.isLoading ? true : false}
+                  className='btn btn-indigo'
+                />
+              </div>
             </div>
-            <div className='w-full p-3'>
-              <input
-                type='submit'
-                value={response.isLoading ? 'loading...' : 'save product'}
-                disabled={response.isLoading ? true : false}
-                className='btn btn-indigo'
-              />
-            </div>
+          </form>
+          <div className='w-full xl:w-4/12 p-3'>
+            <Colors colors={state.colors} deleteColor={deleteColor} />
+            <SizesList list={sizeList} deleteSize={deleteSize} />
           </div>
-        </form>
-        <div className='w-full xl:w-4/12 p-3'>
-          <Colors colors={state.colors} deleteColor={deleteColor} />
-          <SizesList list={sizeList} deleteSize={deleteSize} />
         </div>
-      </div> :<Spinner/>}
-     
+      ) : (
+        <Spinner />
+      )}
     </Wrapper>
   );
 };

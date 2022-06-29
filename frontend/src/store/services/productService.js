@@ -22,29 +22,45 @@ const productService = createApi({
             body: data,
           };
         },
-        providesTags: ['products']
+        invalidatesTags: ['products'],
+      }),
+      updateProduct: builder.mutation({
+        query: (data) => {
+          return {
+            url: '/product',
+            method: 'PUT',
+            body: data,
+          };
+        },
+        invalidatesTags: ['products'],
       }),
       getProducts: builder.query({
         query: (page) => {
           return {
-            url:`/products/${page}`,
+            url: `/products/${page}`,
             method: 'GET',
-          }
+          };
         },
-        providesTags: ['products']
+        providesTags: ['products'],
       }),
+
       getProduct: builder.query({
         query: (id) => {
           return {
-            url:`/product/${id}`,
+            url: `/product/${id}`,
             method: 'GET',
-          }
+          };
         },
-        providesTags: ['products']
+        providesTags: ['products'],
       }),
     };
   },
 });
-export const {useCreateProductMutation, useGetProductsQuery,useGetProductQuery} = productService;
+export const {
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useGetProductsQuery,
+  useGetProductQuery,
+} = productService;
 
 export default productService;

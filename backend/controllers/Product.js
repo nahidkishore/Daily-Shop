@@ -1,5 +1,6 @@
 const formidable = require('formidable');
 const { v4: uuidv4 } = require('uuid');
+const { validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
 const ProductModel = require('../models/ProductModel');
@@ -15,7 +16,7 @@ class Product {
         const parseData = JSON.parse(fields.data);
         const errors = [];
         if (parseData.title.trim().length === 0) {
-          errors.push({ msg: 'Title must berequired' });
+          errors.push({ msg: 'Title must be required' });
         }
         if (parseInt(parseData.price) < 1) {
           errors.push({ msg: 'Price should be above $1' });
@@ -124,11 +125,56 @@ class Product {
   async getProduct(req, res) {
     const { id } = req.params;
     try {
-      const product = await ProductModel.findOne({ _id: id }).select(['-image1','-image2','-image3']);
-      return res.status(200).json( product );
+      const product = await ProductModel.findOne({ _id: id }).select([
+        '-image1',
+        '-image2',
+        '-image3',
+      ]);
+      return res.status(200).json(product);
     } catch (error) {
-      return res.status(500).json({error:error.message})
+      return res.status(500).json({ error: error.message });
       console.log(error.message);
+    }
+  }
+  async updateProduct(req, res) {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      try {
+        const {
+          _id,
+          title,
+          price,
+          discount,
+          stock,
+          colors,
+          sizes,
+          description,
+          category,
+        } = req.body;
+        const response = await ProductModel.updateOne(
+          { _id },
+          {
+            $set: {
+              title,
+              price,
+              discount,
+              stock,
+              category,
+              colors,
+              sizes,
+              description,
+            },
+          }
+        );
+        return res
+          .status(200)
+          .json({ msg: 'Product has updated successfully!', response });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ errors: error });
+      }
+    } else {
+      return res.status(400).json({ errors: errors.array() });
     }
   }
 }
