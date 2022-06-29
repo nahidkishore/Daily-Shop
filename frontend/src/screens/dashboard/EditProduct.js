@@ -11,6 +11,7 @@ import Colors from '../../components/Colors';
 import SizesList from '../../components/SizesList';
 import ReactQuill from 'react-quill';
 import toast, { Toaster } from 'react-hot-toast';
+import parser from "html-react-parser"
 import 'react-quill/dist/quill.snow.css';
 import {
   useGetProductQuery,
@@ -100,12 +101,16 @@ const CreateProduct = () => {
       navigate('/dashboard/products');
     }
   }, [response?.isSuccess]);
-
+  
+  useEffect(() => {
+    setState({...state, description: value})
+   }, [value]
+  )
   useEffect(() => {
     if (!fetching) {
       setState(product);
       setSizeList(product.sizes);
-      setValue(product.description);
+      setValue(parser(product.description));
     }
   }, [product]);
 
