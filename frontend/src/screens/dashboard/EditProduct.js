@@ -9,17 +9,19 @@ import { TwitterPicker } from 'react-color';
 import { v4 as uuidv4 } from 'uuid';
 import Colors from '../../components/Colors';
 import SizesList from '../../components/SizesList';
-
 import ReactQuill from 'react-quill';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-quill/dist/quill.snow.css';
-import {  useGetProductQuery, useProductMutation } from '../../store/services/productService';
+import {
+  useCreateProductMutation,
+  useGetProductQuery,
+} from '../../store/services/productService';
 import { setSuccess } from '../../store/reducers/globalReducer';
 
-const EditProduct = () => {
-    const {id} = useParams();
-    const {data:product, isFetching: fetching} = useGetProductQuery(id);
-    console.log('data: ', product)
+const CreateProduct = () => {
+  const { id } = useParams();
+  const { data: product, isFetching: fetching } = useGetProductQuery(id);
+  console.log('data: ', product);
   const { data = [], isFetching } = useAllCategoriesQuery();
   //console.log(data, isFetching);
   const [value, setValue] = useState('');
@@ -74,7 +76,7 @@ const EditProduct = () => {
     setSizeList(filtered);
   };
   //console.log(preview);
-  const [createNewProduct, response] =useProductMutation();
+  const [createNewProduct, response] = useCreateProductMutation();
   console.log('your response', response);
   const handleCreateProduct = (e) => {
     e.preventDefault();
@@ -83,9 +85,7 @@ const EditProduct = () => {
     formData.append('data', JSON.stringify(state));
     formData.append('sizes', JSON.stringify(sizeList));
     formData.append('description', value);
-    formData.append('image1', state.image1);
-    formData.append('image2', state.image2);
-    formData.append('image3', state.image3);
+
     createNewProduct(formData);
     /*  console.log(state);
     console.log(sizeList); */
@@ -108,23 +108,26 @@ const EditProduct = () => {
   }, [response?.isSuccess]);
 
   useEffect(() => {
-    if(!fetching) {
-       setState(product)
-       setSizeList(product.sizes)
-       setValue(product.description)
+    if (!fetching) {
+      setState(product);
+      setSizeList(product.sizes);
+      setValue(product.description);
     }
-   }, [product])
-   console.log('your state: ', state)
+  }, [product]);
+
+  console.log('your state: ', state);
   return (
     <Wrapper>
       <ScreenHeader>
-        <Toaster position='top-right' reverseOrder={true} />
+      
         <Link to='/dashboard/products' className='btn-dark'>
           <i className='bi bi-arrow-left-short'></i> products list
         </Link>
       </ScreenHeader>
-      {!fetching ? <div className="flex flex-wrap -mx-3">
+      <Toaster position='top-right' reverseOrder={true} />
+      {!fetching ? <div className='flex flex-wrap mx-3'>
         <form className='w-full xl:w-8/12 p-3' onSubmit={handleCreateProduct}>
+        <h3 className="pl-3 capitalize text-lg font-medium text-gray-400">edit product</h3>
           <div className='flex flex-wrap'>
             <div className='w-full md:w-6/12 p-3'>
               <label htmlFor='title' className='label'>
@@ -258,10 +261,10 @@ const EditProduct = () => {
           <Colors colors={state.colors} deleteColor={deleteColor} />
           <SizesList list={sizeList} deleteSize={deleteSize} />
         </div>
-        </div> : <Spinner />}
-
+      </div> :<Spinner/>}
+     
     </Wrapper>
   );
 };
 
-export default EditProduct;
+export default CreateProduct;

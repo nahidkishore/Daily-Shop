@@ -125,7 +125,7 @@ class Product {
     const { id } = req.params;
     try {
       const product = await ProductModel.findOne({ _id: id }).select(['-image1','-image2','-image3']);
-      return res.status(200).json({ product });
+      return res.status(200).json( product );
     } catch (error) {
       return res.status(500).json({error:error.message})
       console.log(error.message);

@@ -13,7 +13,7 @@ import ImagePreview from '../../components/ImagePreview';
 import ReactQuill from 'react-quill';
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-quill/dist/quill.snow.css';
-import { useProductMutation } from '../../store/services/productService';
+import { useCreateProductMutation } from '../../store/services/productService';
 import { setSuccess } from '../../store/reducers/globalReducer';
 
 const CreateProduct = () => {
@@ -89,7 +89,7 @@ const CreateProduct = () => {
     setSizeList(filtered);
   };
   //console.log(preview);
-  const [createNewProduct, response] = useProductMutation();
+  const [createNewProduct, response] = useCreateProductMutation();
   console.log('your response', response);
   const handleCreateProduct = (e) => {
     e.preventDefault();

@@ -40,7 +40,7 @@ const Routing = () => {
               </Private>
             }
           />
-            <Route
+          <Route
             path='edit-product/:id'
             element={
               <Private>
@@ -48,6 +48,7 @@ const Routing = () => {
               </Private>
             }
           />
+           
           <Route
             path='categories'
             element={
