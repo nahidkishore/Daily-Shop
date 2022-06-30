@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 import { clearMessage } from '../../store/reducers/globalReducer';
 import Wrapper from './Wrapper';
-import {  useGetProductsQuery } from '../../store/services/productService';
+import {
+  useDeleteProductMutation,
+  useGetProductsQuery,
+} from '../../store/services/productService';
 import ScreenHeader from '../../components/ScreenHeader';
 import Spinner from '../../components/Spinner';
 import Pagination from '../../components/Pagination';
@@ -26,6 +29,12 @@ const Products = () => {
       dispatch(clearMessage());
     };
   }, []);
+  const [removeProduct, response] = useDeleteProductMutation();
+  const deleteProduct = (id) => {
+    if (window.confirm('Are you sure want to delete this product?')) {
+      removeProduct(id);
+    }
+  };
   return (
     <Wrapper>
       <ScreenHeader>
@@ -81,14 +90,20 @@ const Products = () => {
                       />
                     </td>
                     <td className='p-3 capitalize text-sm font-normal text-gray-400'>
-                      <Link to={`/dashboard/edit-product/${product._id}`} className='btn btn-warning'>
+                      <Link
+                        to={`/dashboard/edit-product/${product._id}`}
+                        className='btn btn-warning'
+                      >
                         edit
                       </Link>
                     </td>
                     <td className='p-3 capitalize text-sm font-normal text-gray-400'>
-                      <Link to={``} className='btn btn-danger'>
+                      <span
+                        className='btn btn-danger cursor-pointer '
+                        onClick={() => deleteProduct(product._id)}
+                      >
                         delete
-                      </Link>
+                      </span>
                     </td>
                   </tr>
                 ))}

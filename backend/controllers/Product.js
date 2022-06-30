@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
 const ProductModel = require('../models/ProductModel');
+const { deleteModel } = require('mongoose');
 
 class Product {
   async create(req, res) {
@@ -175,6 +176,29 @@ class Product {
       }
     } else {
       return res.status(400).json({ errors: errors.array() });
+    }
+  }
+  async deleteProduct(req, res) {
+    const { id } = req.params;
+    try {
+     const product= await ProductModel.findOne({ _id: id });
+     [1,2,3].forEach((number)=>{
+      let key=`image${number}`;
+      let image=product[key];
+      let __dirname=path.resolve();
+      let imagePath=  __dirname + `/../frontend/public/images/${image}`;
+      fs.unlink(imagePath,(err)=>{
+        if(err){
+          throw new Error(err)
+        }
+      })
+     })
+     await ProductModel.findByIdAndDelete(id);
+      return res
+        .status(200)
+        .json({ msg: 'Product has been deleted successfully!' });
+    } catch (error) {
+      throw new Error(error.message) 
     }
   }
 }

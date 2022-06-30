@@ -7,17 +7,26 @@ module.exports = [
     .escape()
     .withMessage('title is required'),
   body('price')
-    .not()
-    .isEmpty()
+    .custom((value) => {
+      if (parseInt(value) < 1) {
+        throw new Error('Price should be above $1');
+      } else {
+        return parseInt(value);
+      }
+    })
     .trim()
-    .escape()
-    .withMessage('price is required'),
+    .escape(),
+
   body('discount')
-    .not()
-    .isEmpty()
+    .custom((value) => {
+      if (parseInt(value) < 0) {
+        throw new Error('Discount should not be negative');
+      } else {
+        return parseInt(value);
+      }
+    })
     .trim()
-    .escape()
-    .withMessage('discount is required'),
+    .escape(),
   body('category')
     .not()
     .isEmpty()
@@ -31,9 +40,13 @@ module.exports = [
     .escape()
     .withMessage('description is required'),
   body('stock')
-    .not()
-    .isEmpty()
+    .custom((value) => {
+      if (parseInt(value) < 300) {
+        throw new Error('Discount must be above 30');
+      } else {
+        return parseInt(value);
+      }
+    })
     .trim()
     .escape()
-    .withMessage('stock is required'),
 ];
