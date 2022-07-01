@@ -3,6 +3,8 @@
 @import './stylecss/button.css';
 @import './stylecss/form.css';
 @import './stylecss/styles.css';
+@import './stylecss/nav.css';
+@import './stylecss/header.css';
 @import 'tailwindcss/utilities';
 
 

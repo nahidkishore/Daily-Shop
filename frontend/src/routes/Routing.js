@@ -7,12 +7,14 @@ import CreateProduct from '../screens/dashboard/CreateProduct';
 import EditProduct from '../screens/dashboard/EditProduct';
 import Products from '../screens/dashboard/Products';
 import UpdateCategory from '../screens/dashboard/UpdateCategory';
+import Home from '../screens/home/Home';
 import Private from './Private';
 import Public from './Public';
 const Routing = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/'  element={<Home/>}/>
         <Route path='auth'>
           <Route
             path='admin-login/'
