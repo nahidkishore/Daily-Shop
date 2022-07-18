@@ -1,9 +1,52 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../../components/home/Header';
 import Nav from '../../../components/home/Nav';
 import { motion } from 'framer-motion';
+import { useUserRegisterMutation } from '../../../store/services/authService';
+import { useDispatch } from 'react-redux';
+import { setUserToken } from '../../../store/reducers/authReducer';
+import {setSuccess } from '../../../store/reducers/globalReducer'
 const Register = () => {
+  const [errors, setErrors] = useState([]);
+  const [state, setState] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+
+  const [registerUser, response] = useUserRegisterMutation();
+  console.log(response);
+  const onChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    registerUser(state);
+  };
+  useEffect(() => {
+    if (response.isError) {
+      setErrors(response?.error?.data?.errors);
+    }
+  }, [response?.error?.data]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(response.isSuccess) {
+      localStorage.setItem('userToken', response?.data?.token);
+      dispatch(setUserToken(response?.data?.token))
+      dispatch(setSuccess (response?.data?.msg));
+      navigate('/user');
+    }
+  }, [response.isSuccess])
+  const showError = (name) => {
+    const exist = errors.find((err) => err.param === name);
+    if (exist) {
+      return exist.msg;
+    } else {
+      return false;
+    }
+  };
   return (
     <>
       <Nav />
@@ -15,7 +58,7 @@ const Register = () => {
             animate={{ opacity: 1, x: 0 }}
             className='w-full sm:w-10/12 md:w-8/12 lg:w-6/12 xl:w-4/12 p-6'
           >
-            <form className='bg-white rounded-lg -mt-12 border border-gray-200 p-10'>
+            <form onSubmit={onSubmit} className='bg-white rounded-lg -mt-12 border border-gray-200 p-10'>
               <h1 className='heading mb-5'>sign up</h1>
               <div className='mb-4'>
                 <label htmlFor='name' className='form-label'>
@@ -25,9 +68,14 @@ const Register = () => {
                   type='text'
                   name='name'
                   id='name'
-                  className='form-input'
+                  className={`form-input ${showError('name') ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-white'}`}
                   placeholder='Enter your name'
+                  value={state.name}
+                  onChange={onChange}
                 />
+                {showError('name') && (
+                  <span className='error'>{showError('name')}</span>
+                )}
               </div>
               <div className='mb-4'>
                 <label htmlFor='email' className='form-label'>
@@ -37,9 +85,14 @@ const Register = () => {
                   type='email'
                   name='email'
                   id='email'
-                  className='form-input'
+                  className={`form-input ${showError('email') ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-white'}`}
                   placeholder='Enter your email address...'
+                  value={state.email}
+                  onChange={onChange}
                 />
+                {showError('email') && (
+                  <span className='error'>{showError('email')}</span>
+                )}
               </div>
               <div className='mb-4'>
                 <label htmlFor='password' className='form-label'>
@@ -49,16 +102,22 @@ const Register = () => {
                   type='password'
                   name='password'
                   id='password'
-                  className='form-input'
+                  className={`form-input ${showError('password') ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-white'}`}
                   placeholder='Enter your password...'
+                  value={state.password}
+                  onChange={onChange}
                 />
+                {showError('password') && (
+                  <span className='error'>{showError('password')}</span>
+                )}
               </div>
 
               <div className='mb-4'>
                 <input
                   type='submit'
-                  value='sign in'
+                  value={`${response.isLoading?'Loading...':'Sign up'}`}
                   className='btn btn-indigo w-full '
+                  disabled={response.isLoading?true: false}
                 />
               </div>
               <div>

@@ -10,6 +10,7 @@ import UpdateCategory from '../screens/dashboard/UpdateCategory';
 import Login from '../screens/home/auth/Login';
 import Register from '../screens/home/auth/Register';
 import Home from '../screens/home/Home';
+import Dashboard from '../screens/users/Dashboard';
 import Private from './Private';
 import Public from './Public';
 const Routing = () => {
@@ -19,6 +20,7 @@ const Routing = () => {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='user' element={<Dashboard />} />
         <Route path='auth'>
           <Route
             path='admin-login/'
