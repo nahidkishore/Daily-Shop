@@ -13,14 +13,24 @@ import Home from '../screens/home/Home';
 import Dashboard from '../screens/users/Dashboard';
 import Private from './Private';
 import Public from './Public';
+import UserAuthRoute from './UserAuthRoute';
+import UserRoute from './UserRoute';
+import 'swiper/css';
+import 'swiper/css/pagination';
 const Routing = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='user' element={<Dashboard />} />
+        <Route element={<UserAuthRoute />}>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+        </Route>
+
+        <Route element={<UserRoute />}>
+          <Route path='user' element={<Dashboard />} />
+        </Route>
+
         <Route path='auth'>
           <Route
             path='admin-login/'
