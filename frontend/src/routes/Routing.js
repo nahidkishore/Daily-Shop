@@ -17,11 +17,14 @@ import UserAuthRoute from './UserAuthRoute';
 import UserRoute from './UserRoute';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import CatProducts from '../screens/home/CatProducts';
 const Routing = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path="cat-products/:name" element={<CatProducts />} />
+        <Route path="cat-products/:name/:page" element={<CatProducts />} />
         <Route element={<UserAuthRoute />}>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
