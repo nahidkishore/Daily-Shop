@@ -11,7 +11,7 @@ import Colors from '../../components/Colors';
 import SizesList from '../../components/SizesList';
 import ReactQuill from 'react-quill';
 import toast, { Toaster } from 'react-hot-toast';
-import parser from "html-react-parser"
+import h2p from "html2plaintext"
 import 'react-quill/dist/quill.snow.css';
 import {
   useGetProductQuery,
@@ -110,7 +110,7 @@ const CreateProduct = () => {
     if (!fetching) {
       setState(product);
       setSizeList(product.sizes);
-      setValue(parser(product.description));
+      setValue(h2p(product.description));
     }
   }, [product]);
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-const Pagination = ({ page, count, perPage, path }) => {
+const Pagination = ({ page, count, perPage, path, theme }) => {
   const totalLinks = Math.ceil(count / perPage);
   let startLoop = page;
   let diff = totalLinks - page;
@@ -16,9 +16,9 @@ const Pagination = ({ page, count, perPage, path }) => {
       allLinks.push(
         <li key={i}>
           <Link
-            className={`pagination-link ${
-              page === i && 'bg-gray-400 text-gray-900'
-            }`}
+            className={` ${
+              theme === 'light' ? 'pagination-link-light' : 'pagination-link'
+            }  ${page === i && 'bg-indigo-500 text-white'}`}
             to={`/${path}/${i}`}
           >
             {i}
@@ -32,7 +32,12 @@ const Pagination = ({ page, count, perPage, path }) => {
     if (page < totalLinks) {
       return (
         <li>
-          <Link className='pagination-link' to={`/${path}/${page + 1}`}>
+          <Link
+            className={`${
+              theme === 'light' ? 'pagination-link-light' : 'pagination-link'
+            }`}
+            to={`/${path}/${page + 1}`}
+          >
             <i class='bi bi-chevron-double-right'></i>
           </Link>
         </li>

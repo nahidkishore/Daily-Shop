@@ -8,7 +8,10 @@ class HomeProducts {
     try {
       const count = await ProductModel.find({
         category: name,
-      }).countDocuments();
+      })
+        .where('stock')
+        .gt(0)
+        .countDocuments();
       const response = await ProductModel.find({ category: name })
         .skip(skip)
         .limit(perPage)

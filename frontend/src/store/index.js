@@ -15,7 +15,11 @@ const Store = configureStore({
     globalReducer: globalReducer,
   },
   middleware: (getDefaultMiddleWare) =>
-    getDefaultMiddleWare().concat([categoryService.middleware, productService.middleware]),
+    getDefaultMiddleWare().concat([
+      categoryService.middleware,
+      productService.middleware,
+      homeProducts.middleware,
+    ]),
 });
 
 export default Store;
