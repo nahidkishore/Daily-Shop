@@ -10,10 +10,10 @@ const ProductCard = ({ product }) => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className='w-full md:w-3/12 px-5 py-10'
+      className='w-full sm:w-6/12 md:w-4/12 xl:w-3/12 px-5 py-10'
       key={product._id}
     >
-      <Link to='/'>
+      <Link to={`/product/${product._id}`}>
         <div className='w-full'>
           <img
             src={`/images/${product.image1}`}
@@ -32,6 +32,7 @@ const ProductCard = ({ product }) => {
             {currency.format(product.price, { code: 'USD' })}
           </span>
         </div>
+        
       </Link>
     </motion.div>
   );
