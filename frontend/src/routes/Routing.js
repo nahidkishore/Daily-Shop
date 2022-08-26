@@ -19,6 +19,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import CatProducts from '../screens/home/CatProducts';
 import Product from '../screens/home/Product';
+import SearchProducts from '../screens/home/SearchProducts';
 const Routing = () => {
   return (
     <BrowserRouter>
@@ -26,6 +27,10 @@ const Routing = () => {
         <Route path='/' element={<Home />} />
         <Route path='cat-products/:name' element={<CatProducts />} />
         <Route path='cat-products/:name/:page' element={<CatProducts />} />
+        <Route
+          path="search-products/:keyword/:page"
+          element={<SearchProducts />}
+        />
         <Route path='product/:name' element={<Product />} />
         <Route element={<UserAuthRoute />}>
           <Route path='/login' element={<Login />} />
@@ -36,6 +41,7 @@ const Routing = () => {
           <Route path='user' element={<Dashboard />} />
         </Route>
 
+       
         <Route path='auth'>
           <Route
             path='admin-login/'

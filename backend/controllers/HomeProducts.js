@@ -1,10 +1,13 @@
 const ProductModel = require('../models/ProductModel');
 class HomeProducts {
   async catProducts(req, res) {
-    const { name, page } = req.params;
+    const { name, page,keyword } = req.params;
     console.log(name, page);
     const perPage = 12;
     const skip = (page - 1) * perPage;
+    const options = name
+      ? { category: name }
+      : keyword && { title: { $regex: `${keyword}`, $options: "i" } };
     if (page) {
       try {
         const count = await ProductModel.find({
@@ -13,7 +16,7 @@ class HomeProducts {
           .where('stock')
           .gt(0)
           .countDocuments();
-        const response = await ProductModel.find({ category: name })
+        const response = await ProductModel.find({ ...options })
           .skip(skip)
           .limit(perPage)
           .sort({ updatedAt: -1 });
@@ -24,7 +27,7 @@ class HomeProducts {
       }
     }
     else {
-      const response = await ProductModel.find({ category: name })
+      const response = await ProductModel.find({ ...options})
         .where('stock')
         .gt(0)
         .limit(4)
