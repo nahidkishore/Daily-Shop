@@ -63,12 +63,13 @@ a.active {
 .description h4 {
 @apply text-xl capitalize;
 }
-/* swiper style css  */
 
+
+/* Swiper styles */
 .slide {
   @apply relative;
   }
-.slide-img {
+  .slide-img {
     @apply absolute inset-0 bg-no-repeat bg-cover;
   }
 .swiper {

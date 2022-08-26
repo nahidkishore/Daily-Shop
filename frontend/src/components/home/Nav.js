@@ -13,7 +13,7 @@ const Nav = () => {
             <img
               src='/daily-shop.jpg'
               alt='logo'
-              className='h-full object-cover max-h-28 max-w-70'
+              className='h-full object-cover max-h-16 max-w-70'
             />
           </Link>
           <ul className='flex items-center'>

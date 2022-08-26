@@ -8,7 +8,7 @@ const Slider = () => {
   const { data, isFetching } = useRandomCategoriesQuery();
   console.log(data, isFetching);
   return isFetching ? (
-    <div className='my-container h-[70vh flex items-center justify-center'>
+    <div className='my-container h-[70vh] flex items-center justify-center'>
       <Spinner />
     </div>
   ) : (
@@ -36,9 +36,9 @@ const Slider = () => {
                   {cat.name}
                 </h1>
                 <div className='mt-10'>
-                <Link
+                  <Link
                     to={`/cat-products/${cat.name}`}
-                    className="btn btn-indigo text-sm"
+                    className='btn btn-indigo text-sm'
                   >
                     browse collections
                   </Link>
