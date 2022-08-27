@@ -11,7 +11,7 @@ class HomeProducts {
     if (page) {
       try {
         const count = await ProductModel.find({
-          category: name,
+         ...options
         })
           .where('stock')
           .gt(0)
