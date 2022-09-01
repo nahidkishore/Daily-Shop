@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Nav from '../../components/home/Nav';
 import currency from 'currency-formatter';
@@ -11,9 +11,11 @@ import {
   incrementQuantity,
   removeItem,
 } from '../../store/reducers/cartReducer';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useSendPaymentMutation } from '../../store/services/paymentService';
 const CartScreenPage = () => {
   const { cart, total } = useSelector((state) => state.cartReducer);
+  const {userToken}=useSelector((state) => state.authReducer)
   const dispatch = useDispatch();
   const inc = (id) => {
     dispatch(incrementQuantity(id));
@@ -27,6 +29,21 @@ const CartScreenPage = () => {
       dispatch(removeItem(id));
     }
   };
+  const navigate = useNavigate();
+  const [doPayment, response] = useSendPaymentMutation();
+  console.log("payment response", response);
+  const payment = () => {
+    if (userToken) {
+      doPayment();
+    } else {
+      navigate("/login");
+    }
+  };
+  useEffect(() => {
+    if (response?.isSuccess) {
+      window.location.href = response?.data?.url;
+    }
+  }, [response]);
   return (
     <>
       <Nav />
@@ -115,12 +132,13 @@ const CartScreenPage = () => {
                 <span className='text-lg font-semibold text-indigo-800 mr-10'>
                   {currency.format(total, { code: 'USD' })}
                 </span>
-                <Link
-                  to='/'
+                <button
+        
                   className='btn bg-indigo-600 text-sm font-medium py-2.5'
+                  onClick={payment}
                 >
                   checkout
-                </Link>
+                </button>
               </div>
             </div>
           </>
