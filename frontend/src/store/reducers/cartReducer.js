@@ -13,7 +13,7 @@ function allItems(data) {
 function calculateTotal(data) {
   let total = 0;
   for (let i = 0; i < data.length; i++) {
-    total += discount(data[i].price, data[i].discount * data[i].quantity);
+    total += discount(data[i].price, data[i].discount) * data[i].quantity;
   }
   return total;
 }

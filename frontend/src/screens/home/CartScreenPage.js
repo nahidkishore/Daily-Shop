@@ -13,9 +13,10 @@ import {
 } from '../../store/reducers/cartReducer';
 import { useNavigate } from 'react-router-dom';
 import { useSendPaymentMutation } from '../../store/services/paymentService';
+
 const CartScreenPage = () => {
   const { cart, total } = useSelector((state) => state.cartReducer);
-  const {userToken}=useSelector((state) => state.authReducer)
+  const { userToken, user } = useSelector((state) => state.authReducer);
   const dispatch = useDispatch();
   const inc = (id) => {
     dispatch(incrementQuantity(id));
@@ -31,12 +32,12 @@ const CartScreenPage = () => {
   };
   const navigate = useNavigate();
   const [doPayment, response] = useSendPaymentMutation();
-  console.log("payment response", response);
+  console.log('payment response', response);
   const payment = () => {
     if (userToken) {
-      doPayment();
+      doPayment({ cart, id: user.id });
     } else {
-      navigate("/login");
+      navigate('/login');
     }
   };
   useEffect(() => {
@@ -133,11 +134,10 @@ const CartScreenPage = () => {
                   {currency.format(total, { code: 'USD' })}
                 </span>
                 <button
-        
                   className='btn bg-indigo-600 text-sm font-medium py-2.5'
                   onClick={payment}
                 >
-                  checkout
+                  {response.isLoading ? 'Loading...' : 'checkout'}
                 </button>
               </div>
             </div>
