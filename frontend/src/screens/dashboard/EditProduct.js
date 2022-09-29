@@ -19,7 +19,7 @@ import {
 } from '../../store/services/productService';
 import { setSuccess } from '../../store/reducers/globalReducer';
 
-const CreateProduct = () => {
+const EditProduct = () => {
   const { id } = useParams();
   const { data: product, isFetching: fetching } = useGetProductQuery(id);
   console.log('data: ', product);
@@ -270,4 +270,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default EditProduct;

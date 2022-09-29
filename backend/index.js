@@ -12,6 +12,14 @@ const app = express();
 connect();
 //console.log(env);
 app.use(cors());
+app.post(
+  "/api/webhook",
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString();
+    },
+  })
+);
 app.use(express.json());
 app.get('/', (req, res) => {
   res.json({ msg: 'welcome to daily shopping service' });
