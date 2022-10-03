@@ -15,7 +15,7 @@ const Store = configureStore({
     [productService.reducerPath]: productService.reducer,
     [homeProducts.reducerPath]: homeProducts.reducer,
     [paymentService.reducerPath]: paymentService.reducer,
-   [orderService.reducerPath]: orderService.reducer,
+    [orderService.reducerPath]: orderService.reducer,
     authReducer: authReducer,
     globalReducer: globalReducer,
     cartReducer,
@@ -26,6 +26,7 @@ const Store = configureStore({
       productService.middleware,
       homeProducts.middleware,
       paymentService.middleware,
+      orderService.middleware,
     ]),
 });
 

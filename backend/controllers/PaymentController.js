@@ -1,7 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_KEY);
-const OrderModel = require('../models/OrderModel');
-const ProductModel = require('../models/ProductModel');
 const User = require('../models/User');
+const ProductModel = require('../models/ProductModel');
+const OrderModel = require('../models/OrderModel');
 class PaymentController {
   async paymentProcess(req, res, next) {
     const { cart, id } = req.body;
@@ -145,7 +145,7 @@ class PaymentController {
     try {
       const session = await stripe.checkout.sessions.retrieve(id);
       return res.status(200).json({
-        msg: "Your payment has verfied successfully",
+        msg: 'Your payment has verfied successfully',
         status: session.payment_status,
       });
     } catch (error) {
@@ -153,4 +153,5 @@ class PaymentController {
     }
   }
 }
+
 module.exports = new PaymentController();

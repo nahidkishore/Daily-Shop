@@ -7,20 +7,23 @@ import { Link, useParams } from 'react-router-dom';
 const Orders = () => {
   let { page } = useParams();
   page = page ? page : 1;
-  const {data,isFetching}=useGetOrdersQuery(page)
+  const { data, isFetching } = useGetOrdersQuery(page);
+  console.log(data);
   return (
     <Wrapper>
       <ScreenHeader>Orders</ScreenHeader>
-      {!isFetching ? (data?.orders?.length > 0 && (
-        <>
-          <div>
-          <table className="dashboard-table">
+      {!isFetching ? (
+        data?.orders?.length > 0 && (
+          <>
+            <div className="overflow-x-auto">
+              <table className="dashboard-table">
                 <thead>
                   <tr className="dashboard-tr">
                     <th className="dashboard-th">title</th>
                     <th className="dashboard-th">quantities</th>
                     <th className="dashboard-th">image</th>
                     <th className="dashboard-th">received</th>
+                    <th className="dashboard-th">Delivered</th>
                     <th className="dashboard-th">details</th>
                   </tr>
                 </thead>
@@ -33,15 +36,18 @@ const Orders = () => {
                         <img
                           src={`/images/${order.productId.image1}`}
                           alt="image name"
-                          className="w-[50px] h-[50px] rounded-full object-cover"
+                          className="w-[35px] h-[35px] md:w-[50px] md:h-[50px] rounded-full object-cover"
                         />
                       </td>
                       <td className="dashboard-td">
-                        {order.received ? "Received" : "Not Received"}
+                        {order.received ? "Yes" : "No"}
+                      </td>
+                      <td className="dashboard-td">
+                        {order.status ? "Yes" : "No"}
                       </td>
                       <td className="dashboard-td">
                         <Link
-                          to="/dashboard"
+                          to={`/dashboard/order-details/${order._id}`}
                           className="btn btn-warning bg-indigo-600 text-xs font-bold"
                         >
                           details
@@ -51,16 +57,18 @@ const Orders = () => {
                   ))}
                 </tbody>
               </table>
-          </div>
-          <Pagination
+            </div>
+            <Pagination
               page={parseInt(page)}
               perPage={data.perPage}
               count={data.count}
               path="dashboard/orders"
             />
-          
-        </>
-      )):(<Spinner/>)}
+          </>
+        )
+      ) : (
+        <Spinner />
+      )}
     </Wrapper>
   );
 };
