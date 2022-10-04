@@ -78,8 +78,7 @@ class PaymentController {
     res.json({ url: session.url });
   }
   async checkOutSession(request, response) {
-    const sig = request.headers['stripe-signature'];
-
+    const sig = request.headers["stripe-signature"];
     let event;
     try {
       event = stripe.webhooks.constructEvent(
@@ -87,6 +86,7 @@ class PaymentController {
         sig,
         process.env.ENDPOINTSECRET
       );
+      console.log("payment success");
     } catch (err) {
       console.log(err.message);
       response.status(400).send(`Webhook Error: ${err.message}`);
@@ -95,12 +95,12 @@ class PaymentController {
 
     // Handle the event
     switch (event.type) {
-      case 'payment_intent.succeeded':
+      case "payment_intent.succeeded":
         const paymentIntent = event.data.object;
 
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
-      case 'checkout.session.completed':
+      case "checkout.session.completed":
         const data = event.data.object;
         let customer = await stripe.customers.retrieve(data.customer);
         customer = JSON.parse(customer?.metadata?.cart);
@@ -128,10 +128,9 @@ class PaymentController {
             }
           } catch (error) {
             console.log(error.message);
-            return response.status(500).json('Server internal error');
+            return response.status(500).json("Server internal error");
           }
         });
-
         break;
       default:
         console.log(`Unhandled event type ${event.type}`);

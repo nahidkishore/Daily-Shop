@@ -8,7 +8,7 @@ const Orders = () => {
   let { page } = useParams();
   page = page ? page : 1;
   const { data, isFetching } = useGetOrdersQuery(page);
-  console.log(data);
+  console.log('your data is ',data);
   return (
     <Wrapper>
       <ScreenHeader>Orders</ScreenHeader>
@@ -74,3 +74,5 @@ const Orders = () => {
 };
 
 export default Orders;
+
+

@@ -1,9 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const paymentService = createApi({
-  reducerPath: 'payment',
+  reducerPath: "payment",
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000/api/',
+    baseUrl: "http://localhost:5000/api/",
     prepareHeaders: (headers, { getState }) => {
       const reducers = getState();
       const token = reducers?.authReducer?.userToken;
@@ -16,8 +16,8 @@ const paymentService = createApi({
       sendPayment: builder.mutation({
         query: (cart) => {
           return {
-            url: '/create-checkout-session',
-            method: 'POST',
+            url: "/create-checkout-session",
+            method: "POST",
             body: cart,
           };
         },
@@ -30,9 +30,8 @@ const paymentService = createApi({
           };
         },
       }),
-
     };
   },
 });
-export const { useSendPaymentMutation,useVerifyPaymentQuery } = paymentService;
+export const { useSendPaymentMutation, useVerifyPaymentQuery } = paymentService;
 export default paymentService;
