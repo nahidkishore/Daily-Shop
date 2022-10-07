@@ -6,11 +6,11 @@ const orderService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api/",
     prepareHeaders: (headers, { getState }) => {
-      const reducers = getState();
+     const reducers = getState();
       const token = reducers?.authReducer?.adminToken;
       headers.set("authorization", token ? `Bearer ${token}` : "");
       return headers;
-    },
+   },
   }),
   endpoints: (builder) => {
     return {
