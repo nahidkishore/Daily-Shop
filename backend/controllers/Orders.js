@@ -17,7 +17,7 @@ class Orders {
         .skip(skip)
         .limit(perPage)
         .sort({ createdAt: -1 });
-      console.log('your order response is : ',response);
+      //console.log('your order response is : ',response);
       return res.status(200).json({ orders: response, perPage, count });
     } catch (error) {
       console.log(error.message);
@@ -38,7 +38,7 @@ class Orders {
       return res.status(500).json({ errors: error });
     }
   }
-  async updateOrder(req, res) {
+ /*  async updateOrder(req, res) {
     const { id, status } = req.query;
     let option = {};
     if (status === "delivered") {
@@ -56,6 +56,23 @@ class Orders {
             ? "Order has delivered"
             : status === "received" && "Order received",
       });
+    } catch (error) {
+      return res.status(500).json({ errors: error.message });
+    }
+  } */
+  async deliverOrder(req, res) {
+    const { id } = req.params;
+    try {
+      const updatedProduct = await OrderModel.findByIdAndUpdate(
+        id,
+        { status: true },
+        { new: true }
+      );
+      return res
+        .status(200)
+        .json({
+          msg: "Product has been sent to customer and it' on the way right now",
+        });
     } catch (error) {
       return res.status(500).json({ errors: error.message });
     }

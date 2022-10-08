@@ -32,15 +32,15 @@ const orderService = createApi({
         },
         providesTags: ["orders"],
       }),
-      // deliverOrder: builder.mutation({
-      //   query: (id) => {
-      //     return {
-      //       url: `/order-update?id=${id}&status=delivered`,
-      //       method: "PUT",
-      //     };
-      //   },
-      //   invalidatesTags: ["orders"],
-      // }),
+       deliverOrder: builder.mutation({
+        query: (id) => {
+          return {
+            url: `/order-deliver/${id}`,
+            method: "PUT",
+          };
+        },
+         invalidatesTags: ["orders"],
+       }),
     };
   },
 });

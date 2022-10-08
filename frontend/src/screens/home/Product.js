@@ -8,7 +8,7 @@ import ProductLoader from '../../components/home/ProductLoader';
 const Product = () => {
   const { name } = useParams();
   const { data, isFetching } = useGetProductQuery(name);
-  console.log(data, isFetching);
+  //console.log(data, isFetching);
   return (
     <>
       <Nav />
