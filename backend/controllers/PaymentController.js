@@ -35,7 +35,7 @@ class PaymentController {
             type: 'fixed_amount',
             fixed_amount: {
               amount: 0,
-              currency: 'bdt', // if we want usd then use "usd" / for india "inr"
+              currency: 'usd', // if we want usd then use "usd" / for india "inr"
             },
             display_name: 'Free shipping',
             // Delivers between 5-7 business days
@@ -60,7 +60,7 @@ class PaymentController {
         actualPrice = actualPrice.toFixed(1);
         return {
           price_data: {
-            currency: 'bdt', // if we want usd then use "usd" / for india "inr"
+            currency: 'usd', // if we want usd then use "usd" / for india "inr"
             product_data: {
               name: item.title,
             },

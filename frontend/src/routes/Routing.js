@@ -23,6 +23,8 @@ import SearchProducts from '../screens/home/SearchProducts';
 import CartScreenPage from '../screens/home/CartScreenPage';
 import Orders from '../screens/dashboard/Orders';
 import OrderDetails from '../screens/dashboard/OrderDetails';
+import UserOrders from '../screens/dashboard/UserOrders';
+import UserOrderDetails from '../screens/users/UserOrderDetails';
 const Routing = () => {
   return (
     <BrowserRouter>
@@ -43,6 +45,9 @@ const Routing = () => {
 
         <Route element={<UserRoute />}>
           <Route path='user' element={<Dashboard />} />
+          <Route path='orders' element={<UserOrders />} />
+          <Route path='orders/:page' element={<UserOrders />} />
+          <Route path='user-order-details/:id' element={<UserOrderDetails />} />
         </Route>
 
         <Route path='auth'>

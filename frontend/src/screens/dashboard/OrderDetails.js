@@ -7,23 +7,26 @@ import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import ScreenHeader from '../../components/ScreenHeader';
 import Wrapper from './Wrapper';
 import Spinner from '../../components/Spinner';
-import { useDeliverOrderMutation, useDetailsQuery } from '../../store/services/orderService';
+import {
+  useDeliverOrderMutation,
+  useDetailsQuery,
+} from '../../store/services/orderService';
 import { discount } from '../../utils/discount';
 
 const OrderDetails = () => {
   const { id } = useParams();
   const componentRef = useRef();
   const { data, isFetching } = useDetailsQuery(id);
-  console.log(data)
+  console.log(data);
   const total =
     discount(
       data?.details?.productId?.price,
       data?.details?.productId?.discount
     ) * data?.details?.quantities;
-    const [sentUserOrder, response] = useDeliverOrderMutation();
-    const sentOrder = () => {
-      sentUserOrder(data?.details?._id);
-    };
+  const [sentUserOrder, response] = useDeliverOrderMutation();
+  const sentOrder = () => {
+    sentUserOrder(data?.details?._id);
+  };
   return (
     <Wrapper>
       <ScreenHeader>
@@ -42,13 +45,13 @@ const OrderDetails = () => {
               content={() => componentRef.current}
             />
           </span>
-          <span className="ml-4">
-            {!data?.details?.status && (
+          <span className='ml-4'>
+            {!isFetching && !data?.details?.status && (
               <button
-                className="btn bg-orange-600 py-1 text-sm font-semibold px-3"
+                className='btn bg-orange-600 py-1 text-sm font-semibold px-3'
                 onClick={sentOrder}
               >
-                {response?.isLoading ? "Loading..." : "Delivered"}
+                {response?.isLoading ? 'Loading...' : 'Delivered'}
               </button>
             )}
           </span>
@@ -71,6 +74,8 @@ const OrderDetails = () => {
                       <th className='dashboard-th'>image</th>
                       <th className='dashboard-th'>quantities</th>
                       <th className='dashboard-th'>price</th>
+                      <th className='dashboard-th'>size</th>
+                      <th className='dashboard-th'>color</th>
                       <th className='dashboard-th'>total</th>
                     </tr>
                   </thead>
@@ -94,6 +99,15 @@ const OrderDetails = () => {
                           ),
                           { code: 'USD' }
                         )}
+                      </td>
+                      <td className='dashboard-td'>
+                        {data?.details?.size ? data?.details?.size : 'No size'}
+                      </td>
+                      <td className='dashboard-td'>
+                        <span
+                          className='block w-[15px] h-[15px] rounded-full'
+                          style={{ background: data?.details?.color }}
+                        ></span>
                       </td>
                       <td className='dashboard-th'>
                         {currency.format(total, { code: 'USD' })}

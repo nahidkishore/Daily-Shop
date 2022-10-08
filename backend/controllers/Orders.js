@@ -1,4 +1,4 @@
-const OrderModel = require("../models/OrderModel");
+const OrderModel = require('../models/OrderModel');
 
 class Orders {
   async getOrders(req, res) {
@@ -10,10 +10,10 @@ class Orders {
       const count = await OrderModel.find(option).countDocuments();
       const response = await OrderModel.find(option)
         .populate(
-          "productId",
-          "-colors -sizes -createdAt -updatedAt -stock -image2 -image3"
+          'productId',
+          '-colors -sizes -createdAt -updatedAt -stock -image2 -image3'
         )
-        .populate("userId", "-password -updatedAt -createdAt -admin")
+        .populate('userId', '-password -updatedAt -createdAt -admin')
         .skip(skip)
         .limit(perPage)
         .sort({ createdAt: -1 });
@@ -28,17 +28,17 @@ class Orders {
     try {
       const details = await OrderModel.findOne({ _id: id })
         .populate(
-          "productId",
-          "-colors -sizes -createdAt -updatedAt -stock -image2 -image3"
+          'productId',
+          '-colors -sizes -createdAt -updatedAt -stock -image2 -image3'
         )
-        .populate("userId", "-password -updatedAt -createdAt -admin");
+        .populate('userId', '-password -updatedAt -createdAt -admin');
       return res.status(200).json({ details });
     } catch (error) {
       console.log(error.message);
       return res.status(500).json({ errors: error });
     }
   }
- /*  async updateOrder(req, res) {
+  /*  async updateOrder(req, res) {
     const { id, status } = req.query;
     let option = {};
     if (status === "delivered") {
@@ -68,11 +68,9 @@ class Orders {
         { status: true },
         { new: true }
       );
-      return res
-        .status(200)
-        .json({
-          msg: "Product has been sent to customer and it' on the way right now",
-        });
+      return res.status(200).json({
+        msg: "Product has been sent to customer and it' on the way right now",
+      });
     } catch (error) {
       return res.status(500).json({ errors: error.message });
     }
