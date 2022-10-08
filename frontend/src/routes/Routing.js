@@ -26,6 +26,8 @@ import OrderDetails from '../screens/dashboard/OrderDetails';
 
 import UserOrderDetails from '../screens/users/UserOrderDetails';
 import UserOrders from '../screens/users/UserOrders';
+import UpdateName from '../screens/users/Profile/UpdateName';
+import UserProfileSidebar from '../screens/users/UserProfileSidebar';
 const Routing = () => {
   return (
     <BrowserRouter>
@@ -49,6 +51,7 @@ const Routing = () => {
           <Route path='orders' element={<UserOrders />} />
           <Route path='orders/:page' element={<UserOrders />} />
           <Route path='user-order-details/:id' element={<UserOrderDetails />} />
+
         </Route>
 
         <Route path='auth'>
@@ -130,6 +133,8 @@ const Routing = () => {
           <Route path='orders' element={<Orders />} />
           <Route path='orders/:page' element={<Orders />} />
           <Route path='order-details/:id' element={<OrderDetails />} />
+          <Route path='userProfile-sidebar' element={<UserProfileSidebar />} />
+          <Route path='updateName' element={<UpdateName />} />
         </Route>
       </Routes>
     </BrowserRouter>

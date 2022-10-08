@@ -16,6 +16,10 @@ const AccountList = () => {
         <AiOutlineShoppingCart size={22} />
         <span className='account-list-title'>orders</span>
       </NavLink>
+      <NavLink to='/userProfile-sidebar' className='account-list'>
+      <BsPersonCircle size={22} />
+        <span className='account-list-title'>Settings</span>
+      </NavLink>
       <span
         className='account-list cursor-pointer'
         onClick={() => dispatch(logout('userToken'))}
