@@ -12,6 +12,7 @@ import {
   useDetailsQuery,
 } from '../../store/services/orderService';
 import { discount } from '../../utils/discount';
+import moment from 'moment';
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -60,11 +61,25 @@ const OrderDetails = () => {
       {!isFetching ? (
         <div ref={componentRef}>
           <h3 className='capitalize text-gray-400'>
-            order number{' '}
+            order number:{' '}
             <span className='text-lg text-gray-300 ml-4'>
               #{data?.details?._id}
             </span>
           </h3>
+          <h3 className='capitalize text-gray-400 mt-2'>
+            order date:{' '}
+            <span className='text-sm text-gray-300 ml-4'>
+              {moment(data?.details?.createdAt).format('MMMM Do YYYY')}
+            </span>
+          </h3>
+          {data?.details?.received && (
+            <h3 className='capitalize text-gray-400 mt-2'>
+              Received date:{' '}
+              <span className='text-sm text-gray-300 ml-4'>
+                {moment(data?.details?.updatedAt).format('MMMM Do YYYY')}
+              </span>
+            </h3>
+          )}
           <div className='flex flex-wrap -mx-5'>
             <div className='w-full md:w-8/12 p-5'>
               <div>

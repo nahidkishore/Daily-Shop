@@ -1,14 +1,14 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const userOrdersService = createApi({
-  reducerPath: "user-orders",
-  tagTypes: "orders",
+  reducerPath: 'user-orders',
+  tagTypes: 'orders',
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/",
+    baseUrl: 'http://localhost:5000/api/',
     prepareHeaders: (headers, { getState }) => {
       const reducers = getState();
       const token = reducers?.authReducer?.userToken;
-      headers.set("authorization", token ? `Bearer ${token}` : "");
+      headers.set('authorization', token ? `Bearer ${token}` : '');
       return headers;
     },
   }),
@@ -18,31 +18,32 @@ const userOrdersService = createApi({
         query: (data) => {
           return {
             url: `/orders?page=${data.page}&userId=${data.userId}`,
-            method: "GET",
+            method: 'GET',
           };
         },
-        providesTags: ["orders"],
+        providesTags: ['orders'],
       }),
       details: builder.query({
         query: (id) => {
           return {
             url: `/order-details/${id}`,
-            method: "GET",
+            method: 'GET',
           };
         },
-        providesTags: ["orders"],
+        providesTags: ['orders'],
       }),
       receivedOrder: builder.mutation({
         query: (id) => {
           return {
             url: `/order-update?id=${id}&status=received`,
-            method: "PUT",
+            method: 'PUT',
           };
         },
-        invalidatesTags: ["orders"],
+        invalidatesTags: ['orders'],
       }),
     };
   },
 });
-export const { useGetOrdersQuery, useDetailsQuery,useReceivedOrderMutation } = userOrdersService;
+export const { useGetOrdersQuery, useDetailsQuery, useReceivedOrderMutation } =
+  userOrdersService;
 export default userOrdersService;

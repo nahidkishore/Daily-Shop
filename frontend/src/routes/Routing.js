@@ -23,8 +23,9 @@ import SearchProducts from '../screens/home/SearchProducts';
 import CartScreenPage from '../screens/home/CartScreenPage';
 import Orders from '../screens/dashboard/Orders';
 import OrderDetails from '../screens/dashboard/OrderDetails';
-import UserOrders from '../screens/dashboard/UserOrders';
+
 import UserOrderDetails from '../screens/users/UserOrderDetails';
+import UserOrders from '../screens/users/UserOrders';
 const Routing = () => {
   return (
     <BrowserRouter>
